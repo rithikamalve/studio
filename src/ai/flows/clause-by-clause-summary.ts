@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Provides a Genkit flow for identifying and summarizing document clauses in plain English.
@@ -35,29 +36,39 @@ const prompt = ai.definePrompt({
   name: 'summarizeClausesPrompt',
   input: {schema: SummarizeClausesInputSchema},
   output: {schema: SummarizeClausesOutputSchema},
-  prompt: `You are an expert legal summarizer. Your task is to first identify the distinct legal clauses in the provided document, and then provide a plain English summary for each identified clause. A clause is a complete section or paragraph that deals with a specific point. Do not treat every new line as a new clause.
+  prompt: `You are an expert legal summarizer. Your task is to first identify the distinct legal clauses in the provided document, and then provide a plain English summary for each identified clause. 
+
+  A clause is a complete section or paragraph that deals with a specific point, often preceded by a number or letter (e.g., "1.", "a.", "Clause IV."). Do not treat every new line or simple sentence as a new clause. Ignore headings or titles that are not part of a substantive clause.
 
   Document Text: {{{documentText}}}
 
   Instructions: 
-  1. Parse the document to identify distinct legal clauses.
-  2. For each clause, create an object containing the original clause text and its summary in plain English.
-  3. Return an array of these objects.
+  1. Carefully parse the document to identify distinct, substantive legal clauses.
+  2. For each clause, create an object containing the full, original clause text and its summary in plain English.
+  3. Return an array of these objects in the specified output format.
   
   Example Input Document Text:
-  1. The Company shall grant the Employee a stock option of 1,000 shares, vested over four years. The Employee must remain employed for a continuous period of one year to be eligible for the first vesting of 250 shares.
-  2. Confidentiality. The Employee agrees to not disclose any proprietary information of the Company during and after the term of employment. Unauthorized disclosure will result in immediate termination and legal action.
+  **Section 1: Stock Options**
+  1.1 Grant of Options. The Company shall grant the Employee a stock option of 1,000 shares, vested over four years. 
+  1.2 Vesting Schedule. The Employee must remain employed for a continuous period of one year to be eligible for the first vesting of 250 shares.
+
+  **Section 2: Confidentiality**
+  2.1 Non-Disclosure. The Employee agrees to not disclose any proprietary information of the Company during and after the term of employment. Unauthorized disclosure will result in immediate termination and legal action.
 
   Example Output:
   {
     "clauseSummaries": [
       {
-        "clause": "1. The Company shall grant the Employee a stock option of 1,000 shares, vested over four years. The Employee must remain employed for a continuous period of one year to be eligible for the first vesting of 250 shares.",
-        "summary": "You will receive 1,000 stock options that become available to you over four years. You get the first 250 options after completing one full year of work."
+        "clause": "1.1 Grant of Options. The Company shall grant the Employee a stock option of 1,000 shares, vested over four years.",
+        "summary": "You will be given 1,000 stock options that become available to you over a four-year period."
       },
       {
-        "clause": "2. Confidentiality. The Employee agrees to not disclose any proprietary information of the Company during and after the term of employment. Unauthorized disclosure will result in immediate termination and legal action.",
-        "summary": "You must keep the company's private information secret, both while you work here and after. If you share it without permission, you will be fired and could be sued."
+        "clause": "1.2 Vesting Schedule. The Employee must remain employed for a continuous period of one year to be eligible for the first vesting of 250 shares.",
+        "summary": "To get the first 250 options, you need to work for the company for at least one continuous year."
+      },
+      {
+        "clause": "2.1 Non-Disclosure. The Employee agrees to not disclose any proprietary information of the Company during and after the term of employment. Unauthorized disclosure will result in immediate termination and legal action.",
+        "summary": "You must keep the company's private information secret, both while you work here and after you leave. If you share it without permission, you could be fired and face legal consequences."
       }
     ]
   }
