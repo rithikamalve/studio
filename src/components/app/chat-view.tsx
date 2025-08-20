@@ -30,7 +30,8 @@ export function ChatView({ documentContent }: ChatViewProps) {
     if (!input.trim() || isLoading) return;
 
     const userMessage: ChatMessage = { sender: 'user', text: input };
-    setMessages(prev => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInput('');
     setIsLoading(true);
 
@@ -46,7 +47,7 @@ export function ChatView({ documentContent }: ChatViewProps) {
         description: err,
       });
        // Restore user message to input if AI fails
-       const lastMessage = messages[messages.length];
+       const lastMessage = newMessages[newMessages.length - 1];
        if(lastMessage.sender === 'user') {
          setInput(lastMessage.text);
          setMessages(prev => prev.slice(0, prev.length -1));
