@@ -33,8 +33,8 @@ export function useRecentDocuments() {
     }
   }, []);
 
-  const addDocument = useCallback((content: string) => {
-    const name = content.trim().split(/\s+/).slice(0, 5).join(' ') + '...';
+  const addDocument = useCallback((content: string, fileName?: string) => {
+    const name = fileName || content.trim().split(/\s+/).slice(0, 5).join(' ') + '...';
     const newDocument: Document = {
       id: uuidv4(),
       name,

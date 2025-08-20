@@ -13,7 +13,7 @@ export default function HomePage() {
             Meet Nomiko
           </h1>
           <p className="max-w-xl text-lg text-muted-foreground">
-            Your AI-powered legal assistant. Paste your document below to get started with clause-by-clause summaries, a generated glossary, and instant answers to your questions.
+            Your AI-powered legal assistant. Upload a document to get started with clause-by-clause summaries, a generated glossary, and instant answers to your questions.
           </p>
         </div>
         <div className="w-full self-stretch">
