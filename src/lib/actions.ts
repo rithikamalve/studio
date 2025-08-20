@@ -30,6 +30,11 @@ import {
     type FairnessBenchmarkInput,
     type FairnessBenchmarkOutput
 } from '@/ai/flows/fairness-benchmark';
+import {
+    detectContradictions as detectContradictionsFlow,
+    type ContradictionDetectionInput,
+    type ContradictionDetectionOutput
+} from '@/ai/flows/contradiction-detection';
 
 
 export async function summarizeClauses(input: SummarizeClausesInput): Promise<SummarizeClausesOutput> {
@@ -83,5 +88,14 @@ export async function benchmarkFairness(input: FairnessBenchmarkInput): Promise<
     } catch (error) {
         console.error("Error in benchmarkFairness action:", error);
         throw new Error("Failed to benchmark fairness. Please try again.");
+    }
+}
+
+export async function detectContradictions(input: ContradictionDetectionInput): Promise<ContradictionDetectionOutput> {
+    try {
+        return await detectContradictionsFlow(input);
+    } catch (error) {
+        console.error("Error in detectContradictions action:", error);
+        throw new Error("Failed to detect contradictions. Please try again.");
     }
 }

@@ -13,6 +13,7 @@ import { ChatView } from '@/components/app/chat-view';
 import { DocumentViewer } from '@/components/app/document-viewer';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { FairnessBenchmarkView } from '@/components/app/fairness-benchmark-view';
+import { ContradictionView } from '@/components/app/contradiction-view';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Suspense } from 'react';
 
@@ -110,6 +111,7 @@ function DashboardClient() {
                         <TabsTrigger value="summary">Clause Summary</TabsTrigger>
                         <TabsTrigger value="glossary">Glossary</TabsTrigger>
                         <TabsTrigger value="fairness">Fairness</TabsTrigger>
+                        <TabsTrigger value="contradictions">Contradictions</TabsTrigger>
                         <TabsTrigger value="chat">Chat</TabsTrigger>
                         </TabsList>
                         <TabsContent value="summary" className="mt-4 flex-grow overflow-y-auto">
@@ -120,6 +122,9 @@ function DashboardClient() {
                         </TabsContent>
                         <TabsContent value="fairness" className="mt-4 flex-grow overflow-y-auto">
                             <FairnessBenchmarkView documentContent={document.content} />
+                        </TabsContent>
+                         <TabsContent value="contradictions" className="mt-4 flex-grow overflow-y-auto">
+                            <ContradictionView documentContent={document.content} />
                         </TabsContent>
                         <TabsContent value="chat" className="mt-4 flex-grow flex flex-col overflow-hidden">
                             <ChatView documentContent={document.content} />

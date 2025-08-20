@@ -1,8 +1,9 @@
 
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { summarizeClauses } from '@/lib/actions';
+import { type SummarizeClausesOutput } from '@/ai/flows/clause-by-clause-summary';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -16,20 +17,18 @@ interface SummaryViewProps {
 }
 
 export function SummaryView({ documentContent }: SummaryViewProps) {
-  const [summaries, setSummaries] = useState<string[]>([]);
+  const [result, setResult] = useState<SummarizeClausesOutput | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
-
-  const clauses = useMemo(() => documentContent.split('\n').filter(line => line.trim() !== ''), [documentContent]);
 
   useEffect(() => {
     async function getSummary() {
       setIsLoading(true);
       setError(null);
       try {
-        const result = await summarizeClauses({ documentText: documentContent });
-        setSummaries(result.clauseSummaries);
+        const summaryResult = await summarizeClauses({ documentText: documentContent });
+        setResult(summaryResult);
       } catch (e) {
         const err = e instanceof Error ? e.message : "An unknown error occurred.";
         setError(err);
@@ -76,9 +75,9 @@ export function SummaryView({ documentContent }: SummaryViewProps) {
             <AlertDescription>{error}</AlertDescription>
         </Alert>
         )}
-        {!isLoading && !error && (
+        {!isLoading && !error && result && (
         <Accordion type="single" collapsible className="w-full">
-            {clauses.map((clause, index) => (
+            {result.clauseSummaries.map((item, index) => (
             <AccordionItem value={`item-${index}`} key={index}>
                 <AccordionTrigger>
                 <span className="text-left">Clause {index + 1}</span>
@@ -86,7 +85,7 @@ export function SummaryView({ documentContent }: SummaryViewProps) {
                 <AccordionContent className="space-y-4">
                 <div>
                     <h4 className="font-semibold text-muted-foreground mb-2">Original Clause</h4>
-                    <p className="text-sm">{clause}</p>
+                    <p className="text-sm">{item.clause}</p>
                 </div>
                 <div>
                     <h4 className="font-semibold text-primary mb-2 flex items-center gap-1.5">
@@ -94,7 +93,7 @@ export function SummaryView({ documentContent }: SummaryViewProps) {
                     AI Summary
                     </h4>
                     <p className="text-sm text-foreground/90">
-                    {summaries[index] || 'No summary available.'}
+                    {item.summary || 'No summary available.'}
                     </p>
                 </div>
                 </AccordionContent>
