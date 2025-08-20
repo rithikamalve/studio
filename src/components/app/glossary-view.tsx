@@ -10,6 +10,7 @@ import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { AlertTriangle, List, Sparkles, Volume2, Loader2, StopCircle } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface GlossaryViewProps {
   documentContent: string;
@@ -112,7 +113,7 @@ export function GlossaryView({ documentContent }: GlossaryViewProps) {
   }
 
   return (
-    <Card>
+    <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <List />
@@ -122,58 +123,60 @@ export function GlossaryView({ documentContent }: GlossaryViewProps) {
           Key terms from your document, defined by AI. Click the speaker icon to listen.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        {isLoading && (
-          <div className="space-y-4">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="space-y-2">
-                <Skeleton className="h-5 w-1/4" />
-                <Skeleton className="h-4 w-3/4" />
-              </div>
-            ))}
-          </div>
-        )}
-        {error && (
-          <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-        {!isLoading && !error && (
-            glossary.length > 0 ? (
-                <ul className="space-y-4">
-                    {glossary.map((entry, index) => (
-                        <li key={index}>
-                            <div className="flex items-start justify-between gap-4">
-                                <div>
-                                    <h4 className="font-semibold text-primary flex items-center gap-1.5">
-                                        <Sparkles className="h-4 w-4" />
-                                        {entry.term}
-                                    </h4>
-                                    <p className="text-sm text-muted-foreground mt-1">{entry.definition}</p>
-                                </div>
-                                <Button 
-                                    variant="ghost" 
-                                    size="icon" 
-                                    onClick={() => handleSpeak(entry.term, entry.definition)}
-                                    className="shrink-0"
-                                    aria-label={`Listen to definition for ${entry.term}`}
-                                    disabled={!!isSpeakingLoading}
-                                >
-                                    {getIconForTerm(entry.term)}
-                                </Button>
-                            </div>
-                            {index < glossary.length - 1 && <Separator className="mt-4" />}
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <div className="rounded-md border-2 border-dashed text-center p-8">
-                  <p className="text-muted-foreground">No legal terms were identified for a glossary.</p>
+      <CardContent className="flex-grow overflow-hidden">
+        <ScrollArea className="h-full pr-4">
+            {isLoading && (
+            <div className="space-y-4">
+                {[...Array(4)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                    <Skeleton className="h-5 w-1/4" />
+                    <Skeleton className="h-4 w-3/4" />
                 </div>
-            )
-        )}
+                ))}
+            </div>
+            )}
+            {error && (
+            <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+            </Alert>
+            )}
+            {!isLoading && !error && (
+                glossary.length > 0 ? (
+                    <ul className="space-y-4">
+                        {glossary.map((entry, index) => (
+                            <li key={index}>
+                                <div className="flex items-start justify-between gap-4">
+                                    <div>
+                                        <h4 className="font-semibold text-primary flex items-center gap-1.5">
+                                            <Sparkles className="h-4 w-4" />
+                                            {entry.term}
+                                        </h4>
+                                        <p className="text-sm text-muted-foreground mt-1">{entry.definition}</p>
+                                    </div>
+                                    <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        onClick={() => handleSpeak(entry.term, entry.definition)}
+                                        className="shrink-0"
+                                        aria-label={`Listen to definition for ${entry.term}`}
+                                        disabled={!!isSpeakingLoading}
+                                    >
+                                        {getIconForTerm(entry.term)}
+                                    </Button>
+                                </div>
+                                {index < glossary.length - 1 && <Separator className="mt-4" />}
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <div className="rounded-md border-2 border-dashed text-center p-8">
+                    <p className="text-muted-foreground">No legal terms were identified for a glossary.</p>
+                    </div>
+                )
+            )}
+        </ScrollArea>
       </CardContent>
     </Card>
   );
