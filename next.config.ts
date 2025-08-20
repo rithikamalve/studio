@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
+        // These packages are server-side only and should not be included in the client bundle.
         config.externals = [
             ...config.externals || [],
             /@genkit-ai\/.+/,
