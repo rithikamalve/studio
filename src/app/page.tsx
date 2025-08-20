@@ -9,7 +9,7 @@ export default function HomePage() {
       <div className="flex w-full max-w-4xl flex-col items-center gap-8">
         <div className="flex flex-col items-center gap-4 text-center">
           <Logo />
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+          <h1 className="font-headline text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
             Meet Nomiko
           </h1>
           <p className="max-w-xl text-lg text-muted-foreground">

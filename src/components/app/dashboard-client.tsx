@@ -65,7 +65,7 @@ export function DashboardClient() {
   return (
     <div className="h-full p-4 sm:p-6 md:p-8">
         <div className="mb-6">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl flex items-center gap-2">
+            <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground sm:text-3xl flex items-center gap-2">
                 <FileText className="h-7 w-7 text-primary" />
                 <span>{document.name}</span>
             </h1>
