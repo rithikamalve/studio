@@ -29,14 +29,15 @@ export function ChatView({ documentContent }: ChatViewProps) {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
 
-    const userMessage: ChatMessage = { sender: 'user', text: input };
-    const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
+    const originalInput = input;
+    const userMessage: ChatMessage = { sender: 'user', text: originalInput };
+    
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
     try {
-      const result = await chat({ documentText: documentContent, question: input });
+      const result = await chat({ documentText: documentContent, question: originalInput });
       const aiMessage: ChatMessage = { sender: 'ai', text: result.answer };
       setMessages(prev => [...prev, aiMessage]);
     } catch (e) {
@@ -47,11 +48,8 @@ export function ChatView({ documentContent }: ChatViewProps) {
         description: err,
       });
        // Restore user message to input if AI fails
-       const lastMessage = newMessages[newMessages.length - 1];
-       if(lastMessage.sender === 'user') {
-         setInput(lastMessage.text);
-         setMessages(prev => prev.slice(0, prev.length -1));
-       }
+       setInput(originalInput);
+       setMessages(prev => prev.slice(0, prev.length -1));
     } finally {
       setIsLoading(false);
     }
