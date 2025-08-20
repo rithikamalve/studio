@@ -10,6 +10,7 @@ function DashboardSkeleton() {
         <Skeleton className="h-10 w-24" />
         <Skeleton className="h-10 w-24" />
         <Skeleton className="h-10 w-24" />
+        <Skeleton className="h-10 w-24" />
       </div>
       <div className="space-y-4">
         <Skeleton className="h-48 w-full" />

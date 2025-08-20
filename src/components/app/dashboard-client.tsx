@@ -13,6 +13,7 @@ import { AlertTriangle, FileText } from 'lucide-react';
 import { ChatView } from './chat-view';
 import { DocumentViewer } from './document-viewer';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable';
+import { FairnessBenchmarkView } from './fairness-benchmark-view';
 
 export function DashboardClient() {
   const searchParams = useSearchParams();
@@ -88,6 +89,7 @@ export function DashboardClient() {
                         <TabsTrigger value="summary">Clause Summary</TabsTrigger>
                         <TabsTrigger value="qna">Reverse Q&A</TabsTrigger>
                         <TabsTrigger value="glossary">Glossary</TabsTrigger>
+                        <TabsTrigger value="fairness">Fairness</TabsTrigger>
                         <TabsTrigger value="chat">Chat</TabsTrigger>
                         </TabsList>
                         <TabsContent value="summary" className="mt-4 flex-grow">
@@ -98,6 +100,9 @@ export function DashboardClient() {
                         </TabsContent>
                         <TabsContent value="glossary" className="mt-4 flex-grow">
                             <GlossaryView documentContent={document.content} />
+                        </TabsContent>
+                        <TabsContent value="fairness" className="mt-4 flex-grow">
+                            <FairnessBenchmarkView documentContent={document.content} />
                         </TabsContent>
                         <TabsContent value="chat" className="mt-4 flex-grow">
                             <ChatView documentContent={document.content} />

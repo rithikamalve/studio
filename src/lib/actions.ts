@@ -30,6 +30,11 @@ import {
     type TextToSpeechInput,
     type TextToSpeechOutput
 } from '@/ai/flows/text-to-speech';
+import {
+    benchmarkFairness as benchmarkFairnessFlow,
+    type FairnessBenchmarkInput,
+    type FairnessBenchmarkOutput
+} from '@/ai/flows/fairness-benchmark';
 
 
 export async function summarizeClauses(input: SummarizeClausesInput): Promise<SummarizeClausesOutput> {
@@ -83,5 +88,14 @@ export async function textToSpeech(input: TextToSpeechInput): Promise<TextToSpee
     } catch (error) {
         console.error("Error in textToSpeech action:", error);
         throw new Error("Failed to generate audio. Please try again.");
+    }
+}
+
+export async function benchmarkFairness(input: FairnessBenchmarkInput): Promise<FairnessBenchmarkOutput> {
+    try {
+        return await benchmarkFairnessFlow(input);
+    } catch (error) {
+        console.error("Error in benchmarkFairness action:", error);
+        throw new Error("Failed to benchmark fairness. Please try again.");
     }
 }
