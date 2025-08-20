@@ -124,7 +124,7 @@ export function GlossaryView({ documentContent }: GlossaryViewProps) {
           Key terms from your document, defined by AI. Click the speaker icon to listen.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow overflow-y-auto">
+      <CardContent className="flex-grow overflow-hidden">
         <ScrollArea className="h-full pr-4">
         {isLoading && (
         <div className="space-y-4">

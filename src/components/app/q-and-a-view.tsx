@@ -58,7 +58,7 @@ export function QAndAView({ documentContent }: QAndAViewProps) {
           Ask a question about your document, and our AI will find the relevant clauses for you.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow flex flex-col overflow-y-auto">
+      <CardContent className="flex-grow flex flex-col overflow-hidden">
         <form onSubmit={handleSubmit} className="flex gap-2 mb-6">
           <Input
             placeholder="e.g., What are the terms of termination?"

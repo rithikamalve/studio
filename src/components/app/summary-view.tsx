@@ -56,7 +56,7 @@ export function SummaryView({ documentContent }: SummaryViewProps) {
           Here is a plain English summary of each clause in your document, powered by AI.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow overflow-y-auto">
+      <CardContent className="flex-grow overflow-hidden">
         <ScrollArea className="h-full pr-4">
         {isLoading && (
         <div className="space-y-4">

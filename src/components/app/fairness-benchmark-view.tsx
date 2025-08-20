@@ -77,7 +77,7 @@ export function FairnessBenchmarkView({ documentContent }: FairnessBenchmarkView
             AI-powered analysis of your document compared to common Indian legal standards.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow overflow-y-auto">
+      <CardContent className="flex-grow overflow-hidden">
         <ScrollArea className="h-full pr-4">
         {isLoading && (
         <div className="space-y-4">

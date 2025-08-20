@@ -84,7 +84,7 @@ export function DashboardClient() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50}>
-                <div className="h-full flex flex-col p-4 sm:p-6 md:p-8">
+                <div className="h-full flex flex-col p-4 sm:p-6 md:p-8 overflow-hidden">
                     <Tabs defaultValue="summary" className="w-full flex-grow flex flex-col">
                         <TabsList>
                         <TabsTrigger value="summary">Clause Summary</TabsTrigger>
@@ -93,19 +93,19 @@ export function DashboardClient() {
                         <TabsTrigger value="fairness">Fairness</TabsTrigger>
                         <TabsTrigger value="chat">Chat</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="summary" className="mt-4 flex-grow">
+                        <TabsContent value="summary" className="mt-4 flex-grow overflow-y-auto">
                             <SummaryView documentContent={document.content} />
                         </TabsContent>
-                        <TabsContent value="qna" className="mt-4 flex-grow">
+                        <TabsContent value="qna" className="mt-4 flex-grow overflow-y-auto">
                             <QAndAView documentContent={document.content} />
                         </TabsContent>
-                        <TabsContent value="glossary" className="mt-4 flex-grow">
+                        <TabsContent value="glossary" className="mt-4 flex-grow overflow-y-auto">
                             <GlossaryView documentContent={document.content} />
                         </TabsContent>
-                        <TabsContent value="fairness" className="mt-4 flex-grow">
+                        <TabsContent value="fairness" className="mt-4 flex-grow overflow-y-auto">
                             <FairnessBenchmarkView documentContent={document.content} />
                         </TabsContent>
-                        <TabsContent value="chat" className="mt-4 flex-grow">
+                        <TabsContent value="chat" className="mt-4 flex-grow overflow-y-auto">
                             <ChatView documentContent={document.content} />
                         </TabsContent>
                     </Tabs>
