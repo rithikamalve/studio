@@ -20,6 +20,11 @@ import {
   type ExtractTextInput,
   type ExtractTextOutput
 } from '@/ai/flows/extract-text';
+import {
+    chat as chatFlow,
+    type ChatInput,
+    type ChatOutput
+} from '@/ai/flows/chat';
 
 export async function summarizeClauses(input: SummarizeClausesInput): Promise<SummarizeClausesOutput> {
   try {
@@ -55,4 +60,13 @@ export async function extractText(input: ExtractTextInput): Promise<ExtractTextO
     console.error("Error in extractText action:", error);
     throw new Error("Failed to extract text from the document. Please ensure the file is valid and not corrupted.");
   }
+}
+
+export async function chat(input: ChatInput): Promise<ChatOutput> {
+    try {
+        return await chatFlow(input);
+    } catch (error) {
+        console.error("Error in chat action:", error);
+        throw new Error("The AI assistant failed to respond. Please try again.");
+    }
 }
