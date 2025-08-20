@@ -6,13 +6,20 @@ import { useRecentDocuments } from '@/hooks/use-recent-documents';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { FileUp, Loader2, Sparkles, X } from 'lucide-react';
-import { ocr } from '@/lib/actions';
+import { FileUp, Loader2, Sparkles, X, File as FileIcon, FileImage } from 'lucide-react';
+import { extractText } from '@/lib/actions';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+const SUPPORTED_FILE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+];
 const SUPPORTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 export function UploadForm() {
@@ -35,16 +42,20 @@ export function UploadForm() {
             });
             return;
         }
-        if (!SUPPORTED_IMAGE_TYPES.includes(selectedFile.type)) {
+        if (!SUPPORTED_FILE_TYPES.includes(selectedFile.type)) {
             toast({
                 variant: "destructive",
                 title: "Unsupported file type",
-                description: "Please select a JPEG, PNG, or WebP image.",
+                description: "Please select a JPEG, PNG, WEBP, PDF, or DOCX file.",
             });
             return;
         }
         setFile(selectedFile);
-        setPreviewUrl(URL.createObjectURL(selectedFile));
+        if (SUPPORTED_IMAGE_TYPES.includes(selectedFile.type)) {
+            setPreviewUrl(URL.createObjectURL(selectedFile));
+        } else {
+            setPreviewUrl(null); // No preview for non-image files
+        }
     }
   };
 
@@ -102,8 +113,8 @@ export function UploadForm() {
       reader.onloadend = async () => {
         const base64data = reader.result as string;
         try {
-            const ocrResult = await ocr({ documentDataUri: base64data });
-            const newDoc = addDocument(ocrResult.text, file.name);
+            const result = await extractText({ documentDataUri: base64data });
+            const newDoc = addDocument(result.text, file.name);
             toast({
                 title: "Analysis Complete",
                 description: "Your document has been processed and is ready.",
@@ -112,8 +123,8 @@ export function UploadForm() {
         } catch (error) {
              toast({
                 variant: "destructive",
-                title: "OCR Failed",
-                description: error instanceof Error ? error.message : "Could not process the document. Please try again with a clearer image.",
+                title: "Text Extraction Failed",
+                description: error instanceof Error ? error.message : "Could not process the document. Please try again.",
             });
             setIsLoading(false);
         }
@@ -132,6 +143,31 @@ export function UploadForm() {
     }
   };
 
+  const renderPreview = () => {
+    if (previewUrl) {
+      return (
+        <Image src={previewUrl} alt="Document preview" layout="fill" objectFit="contain" className="p-2 rounded-lg" />
+      );
+    }
+    if (file) {
+      return (
+        <div className="flex flex-col items-center justify-center text-center text-muted-foreground">
+          <FileIcon className="w-16 h-16 mb-2" />
+          <p className="font-semibold">{file.name}</p>
+        </div>
+      );
+    }
+    return (
+        <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center">
+            <FileUp className="w-10 h-10 mb-3 text-muted-foreground" />
+            <p className="mb-2 text-sm text-muted-foreground">
+                <span className="font-semibold text-primary">Click to upload</span> or drag and drop
+            </p>
+            <p className="text-xs text-muted-foreground">PDF, DOCX, PNG, JPG, or WEBP (max {MAX_FILE_SIZE_MB}MB)</p>
+        </div>
+    );
+  };
+
   return (
     <Card className="w-full shadow-lg">
       <CardHeader>
@@ -140,12 +176,12 @@ export function UploadForm() {
           <span>Upload Document</span>
         </CardTitle>
         <CardDescription>
-          Drag & drop your document image or click to select a file.
+          Drag & drop your document or click to select a file.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-            <div 
+            <div
                 className={cn(
                     "relative flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted/50 transition-colors",
                     isDragging && "border-primary bg-primary/10"
@@ -156,9 +192,9 @@ export function UploadForm() {
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
             >
-                {previewUrl ? (
+                {file ? (
                     <>
-                        <Image src={previewUrl} alt="Document preview" layout="fill" objectFit="contain" className="p-2 rounded-lg" />
+                        {renderPreview()}
                         <Button
                             type="button"
                             variant="destructive"
@@ -174,21 +210,15 @@ export function UploadForm() {
                         </Button>
                     </>
                 ) : (
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center">
-                        <FileUp className="w-10 h-10 mb-3 text-muted-foreground" />
-                        <p className="mb-2 text-sm text-muted-foreground">
-                            <span className="font-semibold text-primary">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-xs text-muted-foreground">PNG, JPG, or WEBP (max {MAX_FILE_SIZE_MB}MB)</p>
-                    </div>
+                    renderPreview()
                 )}
-                <input 
+                <input
                     ref={fileInputRef}
-                    id="dropzone-file" 
-                    type="file" 
+                    id="dropzone-file"
+                    type="file"
                     className="hidden"
                     onChange={(e) => handleFileChange(e.target.files ? e.target.files[0] : null)}
-                    accept={SUPPORTED_IMAGE_TYPES.join(',')}
+                    accept={SUPPORTED_FILE_TYPES.join(',')}
                     disabled={isLoading}
                 />
             </div>

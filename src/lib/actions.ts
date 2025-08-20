@@ -16,10 +16,10 @@ import {
   type ReverseQAndAOutput,
 } from '@/ai/flows/reverse-q-and-a';
 import {
-  ocr as ocrFlow,
-  type OcrInput,
-  type OcrOutput
-} from '@/ai/flows/ocr';
+  extractText as extractTextFlow,
+  type ExtractTextInput,
+  type ExtractTextOutput
+} from '@/ai/flows/extract-text';
 
 export async function summarizeClauses(input: SummarizeClausesInput): Promise<SummarizeClausesOutput> {
   try {
@@ -48,11 +48,11 @@ export async function reverseQAndA(input: ReverseQAndAInput): Promise<ReverseQAn
   }
 }
 
-export async function ocr(input: OcrInput): Promise<OcrOutput> {
+export async function extractText(input: ExtractTextInput): Promise<ExtractTextOutput> {
   try {
-    return await ocrFlow(input);
+    return await extractTextFlow(input);
   } catch (error) {
-    console.error("Error in ocr action:", error);
-    throw new Error("Failed to extract text from the document. Please ensure the image is clear and try again.");
+    console.error("Error in extractText action:", error);
+    throw new Error("Failed to extract text from the document. Please ensure the file is valid and not corrupted.");
   }
 }

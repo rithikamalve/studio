@@ -1,6 +1,7 @@
 'use server';
 /**
  * @fileOverview A Genkit flow for performing OCR on a document.
+ * This file is DEPRECATED in favor of extract-text.ts, which handles more file types.
  *
  * - ocr - A function that takes a document image and returns the extracted text.
  * - OcrInput - The input type for the ocr function.
