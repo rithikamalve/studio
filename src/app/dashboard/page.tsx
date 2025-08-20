@@ -25,7 +25,7 @@ function DashboardSkeleton() {
 
 export default function DashboardPage() {
   return (
-    <Suspense fallback={<DashboardSkeleton />}>
+    <Suspense fallback={<DashboardSkeleton />} >
       <DashboardClient />
     </Suspense>
   );
