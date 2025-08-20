@@ -23,10 +23,11 @@ const nextConfig: NextConfig = {
         // These packages are server-side only and should not be included in the client bundle.
         config.externals = [
             ...config.externals || [],
-            /@genkit-ai\/.+/,
-            /@opentelemetry\/.+/,
+            /@genkit-ai\/.*/,
+            /@opentelemetry\/.*/,
             /firebase-admin/,
             /express/,
+            /handlebars/,
         ];
     }
     return config;
