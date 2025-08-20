@@ -32,7 +32,7 @@ Here is a breakdown of the key directories and their purposes:
 │   ├── app/
 │   │   ├── dashboard/
 │   │   │   ├── layout.tsx       # Layout for the main dashboard view
-│   │   │   └── page.tsx         # Main page for document analysis
+│   │   │   └── page.tsx         # Main page for document analysis (wraps client component)
 │   │   ├── globals.css        # Global styles and Tailwind CSS setup
 │   │   ├── layout.tsx         # Root layout for the entire application
 │   │   └── page.tsx           # The initial upload/landing page
@@ -53,6 +53,7 @@ Here is a breakdown of the key directories and their purposes:
 │   │   ├── app/               # Application-specific components
 │   │   │   ├── chat-view.tsx
 │   │   │   ├── contradiction-view.tsx
+│   │   │   ├── dashboard-client.tsx # Main client component for the dashboard
 │   │   │   ├── document-viewer.tsx
 │   │   │   ├── fairness-benchmark-view.tsx
 │   │   │   ├── glossary-view.tsx
@@ -79,7 +80,8 @@ Here is a breakdown of the key directories and their purposes:
 
 ### `src/components/app/`
 
-- **`upload-form.tsx`**: The main form on the landing page for uploading or pasting document text. Handles file validation, drag-and-drop, and initiates the text extraction process.
+- **`upload-form.tsx`**: The main form on the landing page for uploading documents. Handles file validation, drag-and-drop, and initiates the text extraction process.
+- **`dashboard-client.tsx`**: The core client component for the `/dashboard` page. It fetches the document based on the URL and orchestrates the various analysis views (Summary, Glossary, etc.). This component is wrapped in a Suspense boundary on the dashboard page itself to allow for client-side data fetching without causing SSR issues on Vercel.
 - **`main-sidebar.tsx`**: The collapsible navigation sidebar that displays recent documents and allows users to delete them or start a new analysis.
 - **`document-viewer.tsx`**: The panel on the dashboard that displays the original uploaded document (PDF, DOCX, or image).
 - **`summary-view.tsx`**: Renders the AI-generated clause-by-clause summaries in an accordion format.
@@ -108,8 +110,12 @@ Here is a breakdown of the key directories and their purposes:
 1.  **Install Dependencies**: `npm install`
 2.  **Environment Variables**: Create a `.env` file and add your `GEMINI_API_KEY`.
 3.  **Run the App**: `npm run dev`
-4.  **Run Genkit**: `npm run genkit:watch` (in a separate terminal)
+4.  **Run Genkit**: `npm run genkit:dev` (in a separate terminal)
 
-### Deployment
+### Deployment on Vercel
 
-The application is configured for easy deployment on platforms like **Vercel**. When deploying, Vercel will automatically detect the Next.js framework. The **root directory** should be set to the base of the project repository.
+The application is configured for easy deployment on **Vercel**. When deploying, Vercel will automatically detect the Next.js framework.
+
+- **Root Directory**: You do not need to configure this. Vercel will automatically detect the root of your project repository.
+- **Build & Output Settings**: You do not need to configure these. Vercel's Next.js preset handles this automatically.
+- **Environment Variables**: You will need to add your `GEMINI_API_KEY` to the Environment Variables settings in your Vercel project dashboard.
