@@ -18,6 +18,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+        config.externals = [
+            ...config.externals || [],
+            /@genkit-ai\/.+/,
+            /@opentelemetry\/.+/,
+            /firebase-admin/,
+            /express/,
+        ];
+    }
+    return config;
+  }
 };
 
 export default nextConfig;
