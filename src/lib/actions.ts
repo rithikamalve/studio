@@ -11,11 +11,6 @@ import {
   type GlossaryGenerationOutput,
 } from '@/ai/flows/glossary-generation';
 import {
-  reverseQAndA as reverseQAndAFlow,
-  type ReverseQAndAInput,
-  type ReverseQAndAOutput,
-} from '@/ai/flows/reverse-q-and-a';
-import {
   extractText as extractTextFlow,
   type ExtractTextInput,
   type ExtractTextOutput
@@ -52,15 +47,6 @@ export async function generateGlossary(input: GlossaryGenerationInput): Promise<
   } catch (error) {
     console.error("Error in generateGlossary action:", error);
     throw new Error("Failed to generate glossary. Please try again.");
-  }
-}
-
-export async function reverseQAndA(input: ReverseQAndAInput): Promise<ReverseQAndAOutput> {
-   try {
-    return await reverseQAndAFlow(input);
-  } catch (error) {
-    console.error("Error in reverseQAndA action:", error);
-    throw new Error("Failed to get answer. Please try again.");
   }
 }
 
