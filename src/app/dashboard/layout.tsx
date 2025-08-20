@@ -1,6 +1,5 @@
 import { MainSidebar } from "@/components/app/main-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { Suspense } from "react";
 
 export default function DashboardLayout({
   children,
@@ -11,9 +10,7 @@ export default function DashboardLayout({
     <SidebarProvider>
         <MainSidebar />
         <SidebarInset>
-            <Suspense>
-                {children}
-            </Suspense>
+            {children}
         </SidebarInset>
     </SidebarProvider>
   );

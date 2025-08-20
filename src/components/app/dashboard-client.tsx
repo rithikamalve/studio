@@ -8,13 +8,13 @@ import { type Document } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SummaryView } from './summary-view';
-import { QAndAView } from './q-and-a-view';
 import { GlossaryView } from './glossary-view';
 import { AlertTriangle, FileText } from 'lucide-react';
 import { ChatView } from './chat-view';
 import { DocumentViewer } from './document-viewer';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable';
 import { FairnessBenchmarkView } from './fairness-benchmark-view';
+import { ContradictionView } from './contradiction-view';
 
 export function DashboardClient() {
   const searchParams = useSearchParams();
@@ -88,24 +88,24 @@ export function DashboardClient() {
                     <Tabs defaultValue="summary" className="w-full flex-grow flex flex-col overflow-hidden">
                         <TabsList>
                         <TabsTrigger value="summary">Clause Summary</TabsTrigger>
-                        <TabsTrigger value="qna">Reverse Q&A</TabsTrigger>
                         <TabsTrigger value="glossary">Glossary</TabsTrigger>
                         <TabsTrigger value="fairness">Fairness</TabsTrigger>
+                        <TabsTrigger value="contradictions">Contradictions</TabsTrigger>
                         <TabsTrigger value="chat">Chat</TabsTrigger>
                         </TabsList>
-                        <TabsContent value="summary" className="mt-4 flex-grow overflow-hidden">
+                        <TabsContent value="summary" className="mt-4 flex-grow overflow-y-auto">
                             <SummaryView documentContent={document.content} />
                         </TabsContent>
-                        <TabsContent value="qna" className="mt-4 flex-grow overflow-hidden">
-                            <QAndAView documentContent={document.content} />
-                        </TabsContent>
-                        <TabsContent value="glossary" className="mt-4 flex-grow overflow-hidden">
+                        <TabsContent value="glossary" className="mt-4 flex-grow overflow-y-auto">
                             <GlossaryView documentContent={document.content} />
                         </TabsContent>
-                        <TabsContent value="fairness" className="mt-4 flex-grow overflow-hidden">
+                        <TabsContent value="fairness" className="mt-4 flex-grow overflow-y-auto">
                             <FairnessBenchmarkView documentContent={document.content} />
                         </TabsContent>
-                        <TabsContent value="chat" className="mt-4 flex-grow overflow-hidden">
+                         <TabsContent value="contradictions" className="mt-4 flex-grow overflow-y-auto">
+                            <ContradictionView documentContent={document.content} />
+                        </TabsContent>
+                        <TabsContent value="chat" className="mt-4 flex-grow flex flex-col overflow-hidden">
                             <ChatView documentContent={document.content} />
                         </TabsContent>
                     </Tabs>
