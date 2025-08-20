@@ -10,6 +10,7 @@ import { SummaryView } from './summary-view';
 import { QAndAView } from './q-and-a-view';
 import { GlossaryView } from './glossary-view';
 import { AlertTriangle, FileText } from 'lucide-react';
+import { ChatView } from './chat-view';
 
 export function DashboardClient() {
   const searchParams = useSearchParams();
@@ -78,6 +79,7 @@ export function DashboardClient() {
           <TabsTrigger value="summary">Clause Summary</TabsTrigger>
           <TabsTrigger value="qna">Reverse Q&A</TabsTrigger>
           <TabsTrigger value="glossary">Glossary</TabsTrigger>
+          <TabsTrigger value="chat">Chat</TabsTrigger>
         </TabsList>
         <TabsContent value="summary" className="mt-4">
           <SummaryView documentContent={document.content} />
@@ -87,6 +89,9 @@ export function DashboardClient() {
         </TabsContent>
         <TabsContent value="glossary" className="mt-4">
           <GlossaryView documentContent={document.content} />
+        </TabsContent>
+        <TabsContent value="chat" className="mt-4">
+            <ChatView documentContent={document.content} />
         </TabsContent>
       </Tabs>
     </div>
