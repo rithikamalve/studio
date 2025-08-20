@@ -33,13 +33,15 @@ export function useRecentDocuments() {
     }
   }, []);
 
-  const addDocument = useCallback((content: string, fileName?: string) => {
+  const addDocument = useCallback((content: string, fileName: string, dataUri: string, fileType: string) => {
     const name = fileName || content.trim().split(/\s+/).slice(0, 5).join(' ') + '...';
     const newDocument: Document = {
       id: uuidv4(),
       name,
       content,
       createdAt: new Date().toISOString(),
+      dataUri,
+      fileType,
     };
     const updatedDocuments = [newDocument, ...documents];
     saveDocuments(updatedDocuments);

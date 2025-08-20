@@ -3,4 +3,6 @@ export type Document = {
   name: string;
   content: string;
   createdAt: string;
+  dataUri: string;
+  fileType: string;
 };

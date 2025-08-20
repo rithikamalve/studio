@@ -52,7 +52,11 @@ export function UploadForm() {
         }
         setFile(selectedFile);
         if (SUPPORTED_IMAGE_TYPES.includes(selectedFile.type)) {
-            setPreviewUrl(URL.createObjectURL(selectedFile));
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result as string);
+            };
+            reader.readAsDataURL(selectedFile);
         } else {
             setPreviewUrl(null); // No preview for non-image files
         }
@@ -114,7 +118,7 @@ export function UploadForm() {
         const base64data = reader.result as string;
         try {
             const result = await extractText({ documentDataUri: base64data });
-            const newDoc = addDocument(result.text, file.name);
+            const newDoc = addDocument(result.text, file!.name, base64data, file!.type);
             toast({
                 title: "Analysis Complete",
                 description: "Your document has been processed and is ready.",

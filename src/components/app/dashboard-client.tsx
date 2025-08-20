@@ -11,6 +11,8 @@ import { QAndAView } from './q-and-a-view';
 import { GlossaryView } from './glossary-view';
 import { AlertTriangle, FileText } from 'lucide-react';
 import { ChatView } from './chat-view';
+import { DocumentViewer } from './document-viewer';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable';
 
 export function DashboardClient() {
   const searchParams = useSearchParams();
@@ -63,8 +65,8 @@ export function DashboardClient() {
   }
 
   return (
-    <div className="h-full p-4 sm:p-6 md:p-8">
-        <div className="mb-6">
+    <div className="h-screen flex flex-col">
+        <div className="p-4 sm:p-6 md:p-8 md:pb-4">
             <h1 className="font-headline text-2xl font-bold tracking-tight text-foreground sm:text-3xl flex items-center gap-2">
                 <FileText className="h-7 w-7 text-primary" />
                 <span>{document.name}</span>
@@ -74,26 +76,36 @@ export function DashboardClient() {
             </p>
         </div>
 
-      <Tabs defaultValue="summary" className="w-full">
-        <TabsList>
-          <TabsTrigger value="summary">Clause Summary</TabsTrigger>
-          <TabsTrigger value="qna">Reverse Q&A</TabsTrigger>
-          <TabsTrigger value="glossary">Glossary</TabsTrigger>
-          <TabsTrigger value="chat">Chat</TabsTrigger>
-        </TabsList>
-        <TabsContent value="summary" className="mt-4">
-          <SummaryView documentContent={document.content} />
-        </TabsContent>
-        <TabsContent value="qna" className="mt-4">
-          <QAndAView documentContent={document.content} />
-        </TabsContent>
-        <TabsContent value="glossary" className="mt-4">
-          <GlossaryView documentContent={document.content} />
-        </TabsContent>
-        <TabsContent value="chat" className="mt-4">
-            <ChatView documentContent={document.content} />
-        </TabsContent>
-      </Tabs>
+        <ResizablePanelGroup direction="horizontal" className="flex-grow rounded-lg border-t">
+            <ResizablePanel defaultSize={50}>
+                <DocumentViewer document={document} />
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={50}>
+                <div className="h-full p-4 sm:p-6 md:p-8">
+                    <Tabs defaultValue="summary" className="w-full h-full flex flex-col">
+                        <TabsList>
+                        <TabsTrigger value="summary">Clause Summary</TabsTrigger>
+                        <TabsTrigger value="qna">Reverse Q&A</TabsTrigger>
+                        <TabsTrigger value="glossary">Glossary</TabsTrigger>
+                        <TabsTrigger value="chat">Chat</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="summary" className="mt-4 flex-grow">
+                            <SummaryView documentContent={document.content} />
+                        </TabsContent>
+                        <TabsContent value="qna" className="mt-4 flex-grow">
+                            <QAndAView documentContent={document.content} />
+                        </TabsContent>
+                        <TabsContent value="glossary" className="mt-4 flex-grow">
+                            <GlossaryView documentContent={document.content} />
+                        </TabsContent>
+                        <TabsContent value="chat" className="mt-4 flex-grow">
+                            <ChatView documentContent={document.content} />
+                        </TabsContent>
+                    </Tabs>
+                </div>
+            </ResizablePanel>
+        </ResizablePanelGroup>
     </div>
   );
 }
