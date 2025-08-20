@@ -56,7 +56,7 @@ export function ChatView({ documentContent }: ChatViewProps) {
   };
 
   return (
-    <Card>
+    <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MessageSquare />
@@ -66,7 +66,7 @@ export function ChatView({ documentContent }: ChatViewProps) {
           Ask questions about your document and get instant, AI-powered answers.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col h-[60vh]">
+      <CardContent className="flex-grow flex flex-col overflow-hidden">
         <ScrollArea className="flex-grow mb-4 pr-4">
             <div className="space-y-4">
             {messages.map((message, index) => (

@@ -28,17 +28,20 @@ export function DocumentViewer({ document }: DocumentViewerProps) {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow overflow-hidden">
-                    <ScrollArea className="h-full">
+                   <div className="h-full">
                         {isImage && document.dataUri ? (
                              <div className="relative w-full h-full min-h-[50vh]">
                                 <Image src={document.dataUri} alt="Document preview" layout="fill" objectFit="contain" />
                             </div>
                         ) : (
-                            <pre className="text-sm whitespace-pre-wrap font-body">
-                                {document.content}
-                            </pre>
+                            <object data={document.dataUri} type={document.fileType} width="100%" height="100%">
+                                <p className="text-muted-foreground p-4">
+                                    Your browser does not support displaying this file type directly.
+                                    The extracted text is being analyzed.
+                                </p>
+                            </object>
                         )}
-                    </ScrollArea>
+                    </div>
                 </CardContent>
             </Card>
         </div>

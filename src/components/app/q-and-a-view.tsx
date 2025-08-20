@@ -57,7 +57,7 @@ export function QAndAView({ documentContent }: QAndAViewProps) {
           Ask a question about your document, and our AI will find the relevant clauses for you.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow flex flex-col overflow-hidden">
+      <CardContent className="flex-grow flex flex-col overflow-y-auto">
         <form onSubmit={handleSubmit} className="flex gap-2 mb-6">
           <Input
             placeholder="e.g., What are the terms of termination?"
@@ -71,42 +71,40 @@ export function QAndAView({ documentContent }: QAndAViewProps) {
           </Button>
         </form>
 
-        <ScrollArea className="flex-grow pr-4">
-            <div className="space-y-4">
-            {isLoading && (
-                <div className="space-y-2">
-                    <Skeleton className="h-20 w-full" />
-                    <Skeleton className="h-20 w-full" />
+        <div className="flex-grow space-y-4">
+        {isLoading && (
+            <div className="space-y-2">
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+            </div>
+        )}
+        {error && (
+            <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+            </Alert>
+        )}
+        {!isLoading && !error && hasSearched && (
+            <>
+            <h3 className="font-semibold text-lg flex items-center gap-2">
+                <Sparkles className="text-primary" />
+                Relevant Clauses
+            </h3>
+            {relevantClauses.length > 0 ? (
+                relevantClauses.map((clause, index) => (
+                <div key={index} className="rounded-md border bg-secondary/30 p-4 text-sm">
+                    <p>{clause}</p>
+                </div>
+                ))
+            ) : (
+                <div className="rounded-md border-2 border-dashed text-center p-8">
+                <p className="text-muted-foreground">No relevant clauses found for your question.</p>
                 </div>
             )}
-            {error && (
-                <Alert variant="destructive">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-                </Alert>
-            )}
-            {!isLoading && !error && hasSearched && (
-                <>
-                <h3 className="font-semibold text-lg flex items-center gap-2">
-                    <Sparkles className="text-primary" />
-                    Relevant Clauses
-                </h3>
-                {relevantClauses.length > 0 ? (
-                    relevantClauses.map((clause, index) => (
-                    <div key={index} className="rounded-md border bg-secondary/30 p-4 text-sm">
-                        <p>{clause}</p>
-                    </div>
-                    ))
-                ) : (
-                    <div className="rounded-md border-2 border-dashed text-center p-8">
-                    <p className="text-muted-foreground">No relevant clauses found for your question.</p>
-                    </div>
-                )}
-                </>
-            )}
-            </div>
-        </ScrollArea>
+            </>
+        )}
+        </div>
       </CardContent>
     </Card>
   );

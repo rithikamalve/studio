@@ -55,53 +55,51 @@ export function SummaryView({ documentContent }: SummaryViewProps) {
           Here is a plain English summary of each clause in your document, powered by AI.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow overflow-hidden">
-        <ScrollArea className="h-full pr-4">
-            {isLoading && (
-            <div className="space-y-4">
-                {[...Array(3)].map((_, i) => (
-                <div key={i} className="space-y-2 rounded-md border p-4">
-                    <Skeleton className="h-4 w-3/4" />
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-2/3" />
-                </div>
-                ))}
+      <CardContent className="flex-grow overflow-y-auto">
+        {isLoading && (
+        <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+            <div key={i} className="space-y-2 rounded-md border p-4">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
             </div>
-            )}
-            {error && (
-            <Alert variant="destructive">
-                <AlertTriangle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-            </Alert>
-            )}
-            {!isLoading && !error && (
-            <Accordion type="single" collapsible className="w-full">
-                {clauses.map((clause, index) => (
-                <AccordionItem value={`item-${index}`} key={index}>
-                    <AccordionTrigger>
-                    <span className="text-left">Clause {index + 1}</span>
-                    </AccordionTrigger>
-                    <AccordionContent className="space-y-4">
-                    <div>
-                        <h4 className="font-semibold text-muted-foreground mb-2">Original Clause</h4>
-                        <p className="text-sm">{clause}</p>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-primary mb-2 flex items-center gap-1.5">
-                        <Sparkles className="h-4 w-4" />
-                        AI Summary
-                        </h4>
-                        <p className="text-sm text-foreground/90">
-                        {summaries[index] || 'No summary available.'}
-                        </p>
-                    </div>
-                    </AccordionContent>
-                </AccordionItem>
-                ))}
-            </Accordion>
-            )}
-        </ScrollArea>
+            ))}
+        </div>
+        )}
+        {error && (
+        <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+        </Alert>
+        )}
+        {!isLoading && !error && (
+        <Accordion type="single" collapsible className="w-full">
+            {clauses.map((clause, index) => (
+            <AccordionItem value={`item-${index}`} key={index}>
+                <AccordionTrigger>
+                <span className="text-left">Clause {index + 1}</span>
+                </AccordionTrigger>
+                <AccordionContent className="space-y-4">
+                <div>
+                    <h4 className="font-semibold text-muted-foreground mb-2">Original Clause</h4>
+                    <p className="text-sm">{clause}</p>
+                </div>
+                <div>
+                    <h4 className="font-semibold text-primary mb-2 flex items-center gap-1.5">
+                    <Sparkles className="h-4 w-4" />
+                    AI Summary
+                    </h4>
+                    <p className="text-sm text-foreground/90">
+                    {summaries[index] || 'No summary available.'}
+                    </p>
+                </div>
+                </AccordionContent>
+            </AccordionItem>
+            ))}
+        </Accordion>
+        )}
       </CardContent>
     </Card>
   );
