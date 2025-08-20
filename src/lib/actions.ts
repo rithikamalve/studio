@@ -25,6 +25,12 @@ import {
     type ChatInput,
     type ChatOutput
 } from '@/ai/flows/chat';
+import {
+    textToSpeech as textToSpeechFlow,
+    type TextToSpeechInput,
+    type TextToSpeechOutput
+} from '@/ai/flows/text-to-speech';
+
 
 export async function summarizeClauses(input: SummarizeClausesInput): Promise<SummarizeClausesOutput> {
   try {
@@ -68,5 +74,14 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
     } catch (error) {
         console.error("Error in chat action:", error);
         throw new Error("The AI assistant failed to respond. Please try again.");
+    }
+}
+
+export async function textToSpeech(input: TextToSpeechInput): Promise<TextToSpeechOutput> {
+    try {
+        return await textToSpeechFlow(input);
+    } catch (error) {
+        console.error("Error in textToSpeech action:", error);
+        throw new Error("Failed to generate audio. Please try again.");
     }
 }

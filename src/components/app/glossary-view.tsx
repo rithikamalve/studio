@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { generateGlossary } from '@/lib/actions';
+import { useState, useEffect, useRef } from 'react';
+import { generateGlossary, textToSpeech } from '@/lib/actions';
 import { type GlossaryGenerationOutput } from '@/ai/flows/glossary-generation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
-import { AlertTriangle, List, Sparkles, Volume2 } from 'lucide-react';
+import { AlertTriangle, List, Sparkles, Volume2, Loader2, StopCircle } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
 
@@ -20,6 +20,8 @@ export function GlossaryView({ documentContent }: GlossaryViewProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [speakingTerm, setSpeakingTerm] = useState<string | null>(null);
+  const [isSpeakingLoading, setIsSpeakingLoading] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -42,31 +44,72 @@ export function GlossaryView({ documentContent }: GlossaryViewProps) {
       }
     }
     getGlossary();
+    
+    // Cleanup audio on unmount
+    return () => {
+        if(audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current = null;
+        }
+    }
   }, [documentContent, toast]);
 
-  const speak = (term: string, definition: string) => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-            if (speakingTerm === term) {
-                setSpeakingTerm(null);
-                return;
-            }
+  const handleSpeak = async (term: string, definition: string) => {
+    // If another term is currently playing, stop it.
+    if(audioRef.current) {
+        audioRef.current.pause();
+        if (speakingTerm === term) {
+            setSpeakingTerm(null);
+            return;
         }
-      const textToSpeak = `${term}. ${definition}`;
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.onstart = () => setSpeakingTerm(term);
-      utterance.onend = () => setSpeakingTerm(null);
-      utterance.onerror = () => setSpeakingTerm(null);
-      window.speechSynthesis.speak(utterance);
-    } else {
+    }
+
+    setSpeakingTerm(null);
+    setIsSpeakingLoading(term);
+
+    try {
+        const textToSpeak = `${term}. ${definition}`;
+        const { audioDataUri } = await textToSpeech({ text: textToSpeak });
+        
+        audioRef.current = new Audio(audioDataUri);
+        audioRef.current.play();
+        setSpeakingTerm(term);
+
+        audioRef.current.onended = () => {
+            setSpeakingTerm(null);
+            audioRef.current = null;
+        }
+        audioRef.current.onerror = () => {
+            toast({
+                variant: 'destructive',
+                title: 'Playback Error',
+                description: 'Could not play the audio.',
+            });
+            setSpeakingTerm(null);
+            audioRef.current = null;
+        }
+
+    } catch (e) {
+        const err = e instanceof Error ? e.message : "An unknown error occurred.";
         toast({
             variant: "destructive",
-            title: "Unsupported Feature",
-            description: "Your browser does not support text-to-speech.",
+            title: "Text-to-Speech Failed",
+            description: err,
         })
+    } finally {
+        setIsSpeakingLoading(null);
     }
   };
+  
+  const getIconForTerm = (term: string) => {
+    if (isSpeakingLoading === term) {
+        return <Loader2 className="h-5 w-5 animate-spin" />;
+    }
+    if (speakingTerm === term) {
+        return <StopCircle className="h-5 w-5 text-accent" />;
+    }
+    return <Volume2 className="h-5 w-5" />;
+  }
 
   return (
     <Card>
@@ -113,11 +156,12 @@ export function GlossaryView({ documentContent }: GlossaryViewProps) {
                                 <Button 
                                     variant="ghost" 
                                     size="icon" 
-                                    onClick={() => speak(entry.term, entry.definition)}
+                                    onClick={() => handleSpeak(entry.term, entry.definition)}
                                     className="shrink-0"
                                     aria-label={`Listen to definition for ${entry.term}`}
+                                    disabled={!!isSpeakingLoading}
                                 >
-                                    <Volume2 className={`h-5 w-5 ${speakingTerm === entry.term ? 'text-accent' : ''}`} />
+                                    {getIconForTerm(entry.term)}
                                 </Button>
                             </div>
                             {index < glossary.length - 1 && <Separator className="mt-4" />}
