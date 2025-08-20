@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import { googleAI } from '@genkit-ai/googleai';
 import {z} from 'genkit';
 
 const SummarizeClausesInputSchema = z.object({
@@ -36,6 +37,9 @@ const prompt = ai.definePrompt({
   name: 'summarizeClausesPrompt',
   input: {schema: SummarizeClausesInputSchema},
   output: {schema: SummarizeClausesOutputSchema},
+  config: {
+    model: googleAI.model('gemini-2.0-flash'),
+  },
   prompt: `You are an expert legal summarizer. Your task is to first identify the distinct legal clauses in the provided document, and then provide a plain English summary for each identified clause. 
 
   A clause is a complete section or paragraph that deals with a specific point, often preceded by a number or letter (e.g., "1.", "a.", "Clause IV."). Do not treat every new line or simple sentence as a new clause. Ignore headings or titles that are not part of a substantive clause.

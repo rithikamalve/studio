@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { googleAI } from '@genkit-ai/googleai';
 
 const ExtractTextInputSchema = z.object({
   documentDataUri: z
@@ -37,6 +38,7 @@ const prompt = ai.definePrompt({
   Document: {{media url=documentDataUri}}
   `,
   config: {
+    model: googleAI.model('gemini-2.0-flash'),
     temperature: 0.1,
   },
 });

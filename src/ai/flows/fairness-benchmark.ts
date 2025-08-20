@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import { googleAI } from '@genkit-ai/googleai';
 import {z} from 'genkit';
 
 const FairnessBenchmarkInputSchema = z.object({
@@ -44,6 +45,9 @@ const prompt = ai.definePrompt({
   name: 'benchmarkFairnessPrompt',
   input: {schema: FairnessBenchmarkInputSchema},
   output: {schema: FairnessBenchmarkOutputSchema},
+  config: {
+    model: googleAI.model('gemini-2.0-flash'),
+  },
   prompt: `You are an expert in Indian contract law and standard business practices. Analyze the following document and identify any clauses that are stricter, more unusual, or less favorable to one party than what is considered standard practice in India. 
 
 For example, a typical rental agreement in India requires a 2-3 month security deposit. A clause asking for a 6-month deposit would be unusual and should be flagged as "High" severity.

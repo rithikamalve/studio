@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import { googleAI } from '@genkit-ai/googleai';
 import {z} from 'genkit';
 
 const ChatInputSchema = z.object({
@@ -34,6 +35,9 @@ const prompt = ai.definePrompt({
   name: 'chatPrompt',
   input: {schema: ChatInputSchema},
   output: {schema: ChatOutputSchema},
+  config: {
+    model: googleAI.model('gemini-2.0-flash'),
+  },
   prompt: `You are an AI legal assistant. Your task is to answer questions about the provided legal document. Base your answers strictly on the document's content. If the answer is not in the document, state that clearly.
 
 Document Text:

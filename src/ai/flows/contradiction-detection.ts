@@ -8,6 +8,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import { googleAI } from '@genkit-ai/googleai';
 import {z} from 'genkit';
 
 const ContradictionDetectionInputSchema = z.object({
@@ -40,6 +41,9 @@ const prompt = ai.definePrompt({
   name: 'contradictionDetectionPrompt',
   input: {schema: ContradictionDetectionInputSchema},
   output: {schema: ContradictionDetectionOutputSchema},
+  config: {
+    model: googleAI.model('gemini-2.0-flash'),
+  },
   prompt: `You are an expert legal analyst. Your task is to carefully read the following document and identify any clauses that contradict each other.
 
 For each pair of contradictory clauses you find, provide the full text of both clauses and a clear explanation of why they are contradictory.

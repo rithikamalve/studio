@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import { googleAI } from '@genkit-ai/googleai';
 import {z} from 'genkit';
 
 const GlossaryGenerationInputSchema = z.object({
@@ -34,6 +35,9 @@ const prompt = ai.definePrompt({
   name: 'glossaryGenerationPrompt',
   input: {schema: GlossaryGenerationInputSchema},
   output: {schema: GlossaryGenerationOutputSchema},
+  config: {
+    model: googleAI.model('gemini-2.0-flash'),
+  },
   prompt: `You are an expert legal professional. Generate a glossary of legal terms from the following document. Each entry should have a term and definition.
 
 Document Text: {{{documentText}}}
