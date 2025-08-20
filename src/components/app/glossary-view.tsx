@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -124,6 +125,7 @@ export function GlossaryView({ documentContent }: GlossaryViewProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow overflow-y-auto">
+        <ScrollArea className="h-full pr-4">
         {isLoading && (
         <div className="space-y-4">
             {[...Array(4)].map((_, i) => (
@@ -175,6 +177,7 @@ export function GlossaryView({ documentContent }: GlossaryViewProps) {
                 </div>
             )
         )}
+        </ScrollArea>
       </CardContent>
     </Card>
   );

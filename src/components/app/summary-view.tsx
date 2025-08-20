@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -56,6 +57,7 @@ export function SummaryView({ documentContent }: SummaryViewProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow overflow-y-auto">
+        <ScrollArea className="h-full pr-4">
         {isLoading && (
         <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
@@ -100,6 +102,7 @@ export function SummaryView({ documentContent }: SummaryViewProps) {
             ))}
         </Accordion>
         )}
+        </ScrollArea>
       </CardContent>
     </Card>
   );

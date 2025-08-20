@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -77,6 +78,7 @@ export function FairnessBenchmarkView({ documentContent }: FairnessBenchmarkView
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow overflow-y-auto">
+        <ScrollArea className="h-full pr-4">
         {isLoading && (
         <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
@@ -131,6 +133,7 @@ export function FairnessBenchmarkView({ documentContent }: FairnessBenchmarkView
             </div>
         )
         )}
+        </ScrollArea>
       </CardContent>
     </Card>
   );

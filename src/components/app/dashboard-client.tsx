@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useSearchParams } from 'next/navigation';
@@ -83,8 +84,8 @@ export function DashboardClient() {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={50}>
-                <div className="h-full p-4 sm:p-6 md:p-8">
-                    <Tabs defaultValue="summary" className="w-full h-full flex flex-col">
+                <div className="h-full flex flex-col p-4 sm:p-6 md:p-8">
+                    <Tabs defaultValue="summary" className="w-full flex-grow flex flex-col">
                         <TabsList>
                         <TabsTrigger value="summary">Clause Summary</TabsTrigger>
                         <TabsTrigger value="qna">Reverse Q&A</TabsTrigger>
